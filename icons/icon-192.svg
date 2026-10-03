@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8c7cff"/><stop offset="1" stop-color="#5141dd"/></linearGradient></defs><rect width="512" height="512" rx="116" fill="url(#g)"/><path d="M139 113h133c88 0 132 43 132 113 0 48-24 83-68 101l83 72h-98l-67-62h-32v62h-83V113zm83 70v88h47c34 0 51-15 51-44 0-29-17-44-51-44h-47z" fill="white"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="RATHOD HUB 3.0">
+  <defs>
+    <linearGradient id="bg" x1="40" y1="20" x2="472" y2="492" gradientUnits="userSpaceOnUse"><stop stop-color="#120b0d"/><stop offset=".55" stop-color="#5e111c"/><stop offset="1" stop-color="#d33435"/></linearGradient>
+    <linearGradient id="gold" x1="120" y1="110" x2="390" y2="400" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe792"/><stop offset=".48" stop-color="#f7c948"/><stop offset="1" stop-color="#e79416"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000" flood-opacity=".35"/></filter>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="174" fill="none" stroke="url(#gold)" stroke-width="10" opacity=".9"/>
+  <path d="M118 340c49-20 94-16 138 12V207c-43-27-90-31-138-11v144Zm276 0c-49-20-94-16-138 12V207c43-27 90-31 138-11v144Z" fill="#fff" opacity=".96" filter="url(#shadow)"/>
+  <path d="M256 207v145M138 220c39-10 71-3 97 15M374 220c-39-10-71-3-97 15" fill="none" stroke="#d33435" stroke-width="9" stroke-linecap="round"/>
+  <path d="M173 119h91c57 0 86 28 86 73 0 30-14 51-42 63l53 46h-65l-42-40h-26v40h-55V119Zm55 45v58h31c23 0 34-10 34-29 0-19-11-29-34-29h-31Z" fill="url(#gold)" stroke="#2b1115" stroke-width="7" paint-order="stroke"/>
+  <rect x="335" y="342" width="84" height="48" rx="24" fill="#130c0e" stroke="#f7c948" stroke-width="4"/>
+  <text x="377" y="374" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="800" fill="#f7c948">3.0</text>
+</svg>
