@@ -43,10 +43,10 @@
 
         <div class="section-title"><div><span class="eyebrow">QUICK ACCESS</span><h2>What do you want to learn?</h2></div><button class="text-btn" data-open="materials">View all →</button></div>
         <div class="quick-grid">
-          <button class="quick-card physics" data-open="materials"><span class="subject-icon">⚛</span><div><b>Physics</b><small>Concepts & formulas</small></div><em>→</em></button>
-          <button class="quick-card chemistry" data-open="materials"><span class="subject-icon">⚗</span><div><b>Chemistry</b><small>Reactions & notes</small></div><em>→</em></button>
-          <button class="quick-card biology" data-open="materials"><span class="subject-icon">⌁</span><div><b>Biology</b><small>Diagrams & revision</small></div><em>→</em></button>
-          <button class="quick-card maths" data-open="materials"><span class="subject-icon">∑</span><div><b>Maths</b><small>Practice & shortcuts</small></div><em>→</em></button>
+          <button class="quick-card physics" data-open="materials" data-subject-open="Physics"><span class="subject-icon">⚛</span><div><b>Physics</b><small>Concepts & formulas</small></div><em>→</em></button>
+          <button class="quick-card chemistry" data-open="materials" data-subject-open="Physical Chemistry"><span class="subject-icon">⚗</span><div><b>Chemistry</b><small>Reactions & notes</small></div><em>→</em></button>
+          <button class="quick-card biology" data-open="materials" data-subject-open="Botany"><span class="subject-icon">⌁</span><div><b>Biology</b><small>Diagrams & revision</small></div><em>→</em></button>
+          <button class="quick-card maths" data-open="materials" data-subject-open="Zoology"><span class="subject-icon">∑</span><div><b>Maths</b><small>Practice & shortcuts</small></div><em>→</em></button>
         </div>
 
         <div class="home-grid">
@@ -58,9 +58,12 @@
       </section>
 
       <section id="materials" class="view">
-        <div class="page-banner"><div><span class="eyebrow">RATHOD LIBRARY</span><h2>Study Material</h2><p>Everything important. Nothing distracting.</p></div><div class="banner-symbol">▤</div></div>
-        <div class="library-tools"><input id="materialSearch" class="search" placeholder="Search chapters, notes or subjects…" /><div id="subjectChips" class="chips"><button class="chip active" data-subject="All">All</button><button class="chip" data-subject="Physics">Physics</button><button class="chip" data-subject="Chemistry">Chemistry</button><button class="chip" data-subject="Biology">Biology</button><button class="chip" data-subject="Maths">Maths</button></div></div>
-        <div id="materialsGrid" class="material-grid"></div><div id="materialsEmpty" class="empty hidden"><span>📚</span><b>Library is getting ready</b><p>New study material will appear here.</p></div>
+        <div class="batch-bar"><div><span>YOUR BATCH</span><h2>Rathod NEET Hindi 2027</h2></div><span class="vip-badge">✦ VIP LIBRARY</span></div>
+        <div class="catalog-shell card">
+          <div class="catalog-top"><button id="catalogBack" class="back-btn hidden">←</button><div><span id="catalogEyebrow" class="eyebrow">ALL CLASSES</span><h2 id="catalogTitle">Choose your subject</h2><p id="catalogSubtitle">NEET-focused notes, sheets and revision PDFs.</p></div><input id="materialSearch" class="search catalog-search" placeholder="Search subjects…" /></div>
+          <div id="catalogGrid" class="catalog-grid"></div>
+          <div id="materialsEmpty" class="empty hidden"><span>📚</span><b>No PDFs uploaded yet</b><p>This folder is ready. Add PDFs to Firebase Storage or an external file link.</p></div>
+        </div>
       </section>
 
       <section id="chat" class="view">

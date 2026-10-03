@@ -16,8 +16,47 @@ $$('[data-view]').forEach(b=>b.onclick=()=>openView(b.dataset.view));$$('[data-o
 
 function esc(s=''){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function fmt(ts){try{const d=ts?.toDate?ts.toDate():new Date(ts||Date.now());return d.toLocaleString([],{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}catch{return 'Now'}}
-function renderMaterials(){const q=$('#materialSearch').value.toLowerCase();const rows=state.materials.filter(x=>(state.subject==='All'||x.subject===state.subject)&&`${x.title} ${x.description} ${x.subject}`.toLowerCase().includes(q));$('#materialsGrid').innerHTML=rows.map(x=>`<article class="material card"><div class="file-icon">${x.type==='Video'?'▶️':'📄'}</div><h3>${esc(x.title)}</h3><p>${esc(x.description||'Study resource')}</p><footer><span class="subject">${esc(x.subject||'General')}</span><a href="${esc(x.url||'#')}" target="_blank" rel="noopener">Open →</a></footer></article>`).join('');$('#materialsEmpty').classList.toggle('hidden',rows.length>0);$('#materialCount').textContent=state.materials.length}
-$('#materialSearch').oninput=renderMaterials;$$('.chip').forEach(b=>b.onclick=()=>{$$('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.subject=b.dataset.subject;renderMaterials()});
+const neetSubjects = [
+  {name:'Physics', code:'Ph', icon:'⚛', tone:'violet'},
+  {name:'Physical Chemistry', code:'PC', icon:'⚗', tone:'orange'},
+  {name:'Organic Chemistry', code:'OC', icon:'⌬', tone:'rose'},
+  {name:'Inorganic Chemistry', code:'IC', icon:'◫', tone:'blue'},
+  {name:'Botany', code:'Bo', icon:'⌁', tone:'green'},
+  {name:'Zoology', code:'Zo', icon:'♧', tone:'cyan'}
+];
+const folderTemplates = [
+  {name:'Concise Notes', code:'SM-01', icon:'▤', note:'Quick revision PDFs'},
+  {name:'Practice Sheets', code:'SM-02', icon:'✓', note:'Chapter-wise questions'},
+  {name:'Handwritten Notes', code:'SM-03', icon:'✎', note:'Premium class notes'},
+  {name:'NEET PYQ', code:'SM-04', icon:'◎', note:'Previous year questions'},
+  {name:'NCERT Discussion', code:'SM-05', icon:'N', note:'Line-by-line NCERT'},
+  {name:'Kattar Practice', code:'SM-06', icon:'⚡', note:'High-level practice'}
+];
+let catalog = {level:'subjects', subject:null, folder:null};
+function materialCount(subject,folder){return state.materials.filter(x=>(!subject||x.subject===subject)&&(!folder||x.folder===folder)).length}
+function renderCatalog(){
+ const grid=$('#catalogGrid'), q=$('#materialSearch').value.toLowerCase();
+ $('#catalogBack').classList.toggle('hidden',catalog.level==='subjects');
+ if(catalog.level==='subjects'){
+  $('#catalogEyebrow').textContent='ALL CLASSES';$('#catalogTitle').textContent='Choose your subject';$('#catalogSubtitle').textContent='Complete NEET library — Physics, Chemistry and Biology.';$('#materialSearch').placeholder='Search subjects…';
+  const rows=neetSubjects.filter(x=>x.name.toLowerCase().includes(q));
+  grid.className='catalog-grid subject-catalog';grid.innerHTML=rows.map(x=>`<button class="subject-card ${x.tone}" data-catalog-subject="${esc(x.name)}"><span class="catalog-icon">${x.icon}</span><div><span>${x.code}</span><b>${x.name}</b><small>${materialCount(x.name)} PDFs available</small></div><em>›</em></button>`).join('');$('#materialsEmpty').classList.add('hidden');
+ } else if(catalog.level==='folders'){
+  $('#catalogEyebrow').textContent='SUBJECT LIBRARY';$('#catalogTitle').textContent=catalog.subject;$('#catalogSubtitle').textContent='Open a folder to view its PDFs.';$('#materialSearch').placeholder='Search folders…';
+  const rows=folderTemplates.filter(x=>`${x.name} ${x.note}`.toLowerCase().includes(q));
+  grid.className='catalog-grid folder-catalog';grid.innerHTML=rows.map(x=>`<button class="folder-card" data-catalog-folder="${esc(x.name)}"><span class="folder-code">${x.code}</span><span class="folder-icon">${x.icon}</span><div><b>${x.name}</b><small>${x.note}</small><span>${materialCount(catalog.subject,x.name)} PDFs</span></div><em>›</em></button>`).join('');$('#materialsEmpty').classList.add('hidden');
+ } else {
+  $('#catalogEyebrow').textContent=catalog.subject.toUpperCase();$('#catalogTitle').textContent=catalog.folder;$('#catalogSubtitle').textContent='Open or download your study PDFs.';$('#materialSearch').placeholder='Search PDFs…';
+  const rows=state.materials.filter(x=>x.subject===catalog.subject&&x.folder===catalog.folder&&`${x.title} ${x.description||''}`.toLowerCase().includes(q));
+  grid.className='catalog-grid pdf-catalog';grid.innerHTML=rows.map((x,i)=>`<article class="pdf-row"><span class="pdf-icon">PDF</span><div><b>${esc(x.title)}</b><small>${esc(x.description||catalog.subject+' study material')}</small></div><span class="pdf-size">${esc(x.size||'PDF')}</span><a href="${esc(x.url||'#')}" target="_blank" rel="noopener">Open</a></article>`).join('');$('#materialsEmpty').classList.toggle('hidden',rows.length>0);
+ }
+ $('#materialCount').textContent=state.materials.length;
+ grid.querySelectorAll('[data-catalog-subject]').forEach(b=>b.onclick=()=>{catalog={level:'folders',subject:b.dataset.catalogSubject,folder:null};$('#materialSearch').value='';renderCatalog()});
+ grid.querySelectorAll('[data-catalog-folder]').forEach(b=>b.onclick=()=>{catalog.level='pdfs';catalog.folder=b.dataset.catalogFolder;$('#materialSearch').value='';renderCatalog()});
+}
+$('#materialSearch').oninput=renderCatalog;
+$('#catalogBack').onclick=()=>{if(catalog.level==='pdfs'){catalog.level='folders';catalog.folder=null}else{catalog={level:'subjects',subject:null,folder:null}};$('#materialSearch').value='';renderCatalog()};
+$$('[data-subject-open]').forEach(b=>b.addEventListener('click',()=>{catalog={level:'folders',subject:b.dataset.subjectOpen,folder:null};$('#materialSearch').value='';renderCatalog()}));
 function renderDoubts(){const rows=state.doubts;$('#doubtsList').innerHTML=rows.map(x=>`<article class="doubt"><div><span class="subject">${esc(x.subject)}</span><h3>${esc(x.text)}</h3><p>Asked by ${esc(x.authorName||'Student')}</p></div><time>${fmt(x.createdAt)}</time></article>`).join('');$('#doubtsEmpty').classList.toggle('hidden',rows.length>0);$('#doubtCount').textContent=rows.length}
 function addMessage(x){const el=document.createElement('article');el.className=`message ${x.uid===state.user?.uid?'mine':''}`;el.innerHTML=`<header><b>${esc(x.authorName||'Student')}</b><time>${fmt(x.createdAt)}</time></header><p>${esc(x.text)}</p>`;$('#chatMessages').append(el);$('#chatMessages').scrollTop=$('#chatMessages').scrollHeight}
 
@@ -27,11 +66,11 @@ async function initFirebase(){const configured=!Object.values(firebaseConfig).so
  const app=initializeApp(firebaseConfig);state.auth=getAuth(app);state.db=getFirestore(app);state.api={collection,addDoc,query,orderBy,limit,onSnapshot,serverTimestamp,signInAnonymously,updateProfile};state.firebase=true;$('#connectionBadge').textContent='Firebase connected';$('#connectionBadge').classList.add('online');
  onAuthStateChanged(state.auth,u=>{state.user=u;renderAuth();if(u)subscribeData()});
  }catch(e){console.error(e);toast('Firebase connection failed — demo mode started');startDemo()}}
-function startDemo(){state.materials=demoMaterials;state.doubts=JSON.parse(localStorage.getItem('rh_doubts')||'[]');state.user={uid:localStorage.getItem('rh_uid')||crypto.randomUUID(),displayName:localStorage.getItem('rh_name')||'Guest Student'};localStorage.setItem('rh_uid',state.user.uid);renderAuth();renderMaterials();renderDoubts();const welcome={authorName:'Rathod Hub',text:'Welcome! Firebase connect karne ke baad yeh chat sabhi devices par live hogi.',createdAt:Date.now()};addMessage(welcome)}
+function startDemo(){state.materials=demoMaterials;state.doubts=JSON.parse(localStorage.getItem('rh_doubts')||'[]');state.user={uid:localStorage.getItem('rh_uid')||crypto.randomUUID(),displayName:localStorage.getItem('rh_name')||'Guest Student'};localStorage.setItem('rh_uid',state.user.uid);renderAuth();renderCatalog();renderDoubts();const welcome={authorName:'Rathod Hub',text:'Welcome! Firebase connect karne ke baad yeh chat sabhi devices par live hogi.',createdAt:Date.now()};addMessage(welcome)}
 function renderAuth(){if(!state.user){$('#authBox').innerHTML='<button id="loginBtn" class="primary full">Continue as Student</button>';$('#loginBtn').onclick=login;return}$('#authBox').innerHTML=`<button class="ghost full">👤 ${esc(state.user.displayName||'Student')}</button>`}
 async function login(){if(!state.firebase)return;try{const c=await state.api.signInAnonymously(state.auth);const name=prompt('Your name?','Student')?.trim()||'Student';await state.api.updateProfile(c.user,{displayName:name});state.user=c.user;renderAuth();subscribeData()}catch(e){toast(e.message)}}
 function subscribeData(){if(state.subscribed)return;state.subscribed=true;const a=state.api;
- a.onSnapshot(a.query(a.collection(state.db,'materials'),a.orderBy('createdAt','desc'),a.limit(100)),s=>{state.materials=s.docs.map(d=>({id:d.id,...d.data()}));renderMaterials()});
+ a.onSnapshot(a.query(a.collection(state.db,'materials'),a.orderBy('createdAt','desc'),a.limit(100)),s=>{state.materials=s.docs.map(d=>({id:d.id,...d.data()}));renderCatalog()});
  a.onSnapshot(a.query(a.collection(state.db,'doubts'),a.orderBy('createdAt','desc'),a.limit(100)),s=>{state.doubts=s.docs.map(d=>({id:d.id,...d.data()}));renderDoubts()});
  a.onSnapshot(a.query(a.collection(state.db,'messages'),a.orderBy('createdAt','asc'),a.limit(100)),s=>{$('#chatMessages').innerHTML='';s.docs.forEach(d=>addMessage(d.data()))});}
 $('#chatForm').onsubmit=async e=>{e.preventDefault();const text=$('#chatInput').value.trim();if(!text)return;if(!state.user){toast('First continue as student');return}$('#chatInput').value='';if(state.firebase){await state.api.addDoc(state.api.collection(state.db,'messages'),{text,uid:state.user.uid,authorName:state.user.displayName||'Student',createdAt:state.api.serverTimestamp()})}else addMessage({text,uid:state.user.uid,authorName:state.user.displayName,createdAt:Date.now()})};
