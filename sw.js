@@ -1,4 +1,5 @@
-const CACHE='rathod-hub-v6';const ASSETS=['./','./index.html','./styles.css','./app.js','./firebase-config.js','./manifest.webmanifest','./icons/icon.svg',
+const CACHE='rathod-hub-v7';const ASSETS=['./','./index.html','./styles.css','./app.js','./firebase-config.js','./manifest.webmanifest','./icons/icon.svg',
+  "./about.html",
   "./faq.html",
   "./privacy.html",
   "./help.html",

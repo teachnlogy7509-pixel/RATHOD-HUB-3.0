@@ -7,11 +7,10 @@ const demoMaterials = [
   {id:'1',title:'Motion & Laws — Quick Notes',description:'Core formulas, graphs and solved examples.',subject:'Physics',type:'PDF',url:'#'},
   {id:'2',title:'Organic Chemistry Reactions',description:'Important named reactions and revision map.',subject:'Chemistry',type:'PDF',url:'#'},
   {id:'3',title:'Human Physiology Revision',description:'Chapter-wise diagrams and one-shot notes.',subject:'Biology',type:'Notes',url:'#'},
-  {id:'4',title:'Calculus Formula Sheet',description:'Limits, derivatives and integration formulas.',subject:'Maths',type:'PDF',url:'#'}
 ];
 
 function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
-function openView(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.nav-item,.mobile-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent={home:'Rathod Hub',materials:'Study Material',chat:'Live Chat',doubts:'Doubt Room',music:'Focus Music',leaderboard:'Leaderboard',community:'Community',admin:'Admin Sync'}[id];$('.sidebar').classList.remove('open');location.hash=id==='home'?'':id}
+function openView(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.nav-item,.mobile-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent={home:'RATHOD HUB 3.0',materials:'Study Material',chat:'Live Chat',doubts:'Doubt Room',music:'Focus Music',leaderboard:'Leaderboard',community:'Community',admin:'Admin Sync'}[id];$('.sidebar').classList.remove('open');location.hash=id==='home'?'':id}
 $$('[data-view]').forEach(b=>b.onclick=()=>openView(b.dataset.view));$$('[data-open]').forEach(b=>b.onclick=()=>openView(b.dataset.open));$('#menuBtn').onclick=()=>$('.sidebar').classList.toggle('open');
 
 function esc(s=''){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
