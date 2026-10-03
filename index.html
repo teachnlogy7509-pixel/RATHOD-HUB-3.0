@@ -4,7 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#5a43d6" />
-  <meta name="description" content="Rathod Hub 3.0 — premium study material, live chat and doubt solving." />
+  <meta name="description" content="Rathod Hub 3.0 — NEET Hindi study material by Rathod, Google Drive PDFs, focus music, live chat, community and legacy leaderboard." />
+  <meta name="keywords" content="Rathod Hub, study material Rathod, study material by Rathod, NEET Hindi study material, NEET PDF, Physics Chemistry Biology notes, Rathod study app" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <link rel="canonical" href="https://teachnlogy7509-pixel.github.io/RATHOD-HUB-3.0/" />
+  <meta property="og:title" content="Rathod Hub 3.0 — NEET Study Material" />
+  <meta property="og:description" content="Premium NEET Hindi study material, PDF library, music, community and live chat by Rathod." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://teachnlogy7509-pixel.github.io/RATHOD-HUB-3.0/" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
@@ -17,7 +24,8 @@
       <nav id="nav" aria-label="Main navigation">
         <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span><span>Home</span></button>
         <button class="nav-item" data-view="materials"><span class="nav-icon">▤</span><span>Study Library</span></button>
-        <button class="nav-item" data-view="chat"><span class="nav-icon">◉</span><span>Live Chat</span><i>LIVE</i></button>
+        <button class="nav-item" data-view="chat"><span class="nav-icon">💬</span><span>Live Chat</span><i>LIVE</i></button>
+        <button class="nav-item" data-view="community"><span class="nav-icon">☻</span><span>Community</span></button>
         <button class="nav-item" data-view="music"><span class="nav-icon">♫</span><span>Focus Music</span></button>
         <button class="nav-item" data-view="leaderboard"><span class="nav-icon">♛</span><span>Leaderboard</span></button>
         <button class="nav-item admin-only hidden" data-view="admin"><span class="nav-icon">⚙</span><span>Admin Sync</span></button>
@@ -58,6 +66,7 @@
         </div>
 
         <div class="stat-strip"><button data-open="materials"><b id="materialCount">0</b><span>Resources</span></button><i></i><button data-open="chat"><b>24×7</b><span>Live community</span></button><i></i><button data-open="doubts"><b id="doubtCount">0</b><span>Doubts asked</span></button></div>
+        <div class="support-links"><a href="faq.html"><span>?</span><b>FAQ</b></a><a href="privacy.html"><span>◉</span><b>Privacy</b></a><a href="help.html"><span>♧</span><b>Help Desk</b></a><a href="terms.html"><span>§</span><b>Terms</b></a><a href="rules.html"><span>✓</span><b>Rules</b></a><a href="https://t.me/Ashish_Thakur1" target="_blank" rel="noopener"><span>✦</span><b>Admin</b></a><a href="https://t.me/YPTSTUDY1" target="_blank" rel="noopener"><span>➤</span><b>Join Group</b></a></div>
       </section>
 
       <section id="materials" class="view">
@@ -72,6 +81,13 @@
       <section id="chat" class="view">
         <div class="page-banner compact"><div><span class="eyebrow">STUDENT COMMUNITY</span><h2>Live Chat</h2><p>Learn together. Be kind. Stay focused.</p></div><span class="live-users"><i></i> Room live</span></div>
         <div class="chat-layout card"><div class="chat-head"><div class="room-avatar">RH</div><div><b>Rathod Study Room</b><small><span class="online-dot"></span> Live student discussion</small></div><button class="round-btn">⋮</button></div><div id="chatMessages" class="messages"></div><form id="chatForm" class="composer"><button type="button" class="attach-btn">＋</button><input id="chatInput" maxlength="500" placeholder="Type your message…" autocomplete="off" required /><button class="send-btn" aria-label="Send">➤</button></form></div>
+      </section>
+
+      <section id="community" class="view">
+        <div class="community-hero"><div><span class="eyebrow">RATHOD STUDENT WORLD</span><h2>Community</h2><p>Share karo, reply karo, motivate karo — NEET journey ab akeli nahi.</p></div><div class="community-faces"><span>😄</span><span>🔥</span><span>💡</span></div></div>
+        <form id="communityForm" class="community-composer card"><div class="composer-avatar">R</div><textarea id="communityText" maxlength="1000" rows="3" placeholder="Community mein kuch share karein…" required></textarea><button type="submit">Post</button></form>
+        <div class="community-filter"><b>Latest posts</b><span>5 reactions • comments • replies</span></div>
+        <div id="communityPosts" class="community-feed"><div class="empty"><span>☻</span><b>Community loading…</b></div></div>
       </section>
 
       <section id="music" class="view">
@@ -102,9 +118,11 @@
     </main>
   </div>
 
-  <nav class="mobile-nav five" aria-label="Mobile navigation"><button class="active" data-view="home"><span>⌂</span><small>Home</small></button><button data-view="materials"><span>▤</span><small>Library</small></button><button class="mobile-live" data-view="music"><span>♫</span><small>Music</small></button><button data-view="leaderboard"><span>♛</span><small>Ranks</small></button><button data-view="chat"><span>◉</span><small>Chat</small></button></nav>
+  <nav class="mobile-nav six" aria-label="Mobile navigation"><button class="active" data-view="home"><span>⌂</span><small>Home</small></button><button data-view="materials"><span>▤</span><small>Library</small></button><button class="mobile-live" data-view="community"><span>☻</span><small>Community</small></button><button data-view="music"><span>♫</span><small>Music</small></button><button data-view="leaderboard"><span>♛</span><small>Ranks</small></button><button data-view="chat"><span>💬</span><small>Chat</small></button></nav>
 
   <dialog id="doubtDialog"><form id="doubtForm" method="dialog" class="modal-card"><div class="modal-head"><div><span class="eyebrow">ASK COMMUNITY</span><h3>Post your doubt</h3></div><button type="button" id="closeDialog" class="icon-btn">✕</button></div><label>Subject<select id="doubtSubject" required><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Botany</option><option>Zoology</option><option>Other</option></select></label><label>Your question<textarea id="doubtText" rows="5" maxlength="800" placeholder="Explain your doubt clearly…" required></textarea></label><button class="primary full" type="submit">Post to community</button></form></dialog>
-  <div id="toast" class="toast"></div><script type="module" src="app.js"></script>
+  <div id="toast" class="toast"></div>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"EducationalApplication","name":"Rathod Hub 3.0","applicationCategory":"EducationalApplication","operatingSystem":"Web, Android, Windows","description":"NEET Hindi study material, PDF library, focus music, live chat and community by Rathod.","url":"https://teachnlogy7509-pixel.github.io/RATHOD-HUB-3.0/"}</script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

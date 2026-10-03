@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://teachnlogy7509-pixel.github.io/RATHOD-HUB-3.0/sitemap.xml
