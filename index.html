@@ -18,6 +18,9 @@
         <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span><span>Home</span></button>
         <button class="nav-item" data-view="materials"><span class="nav-icon">▤</span><span>Study Library</span></button>
         <button class="nav-item" data-view="chat"><span class="nav-icon">◉</span><span>Live Chat</span><i>LIVE</i></button>
+        <button class="nav-item" data-view="music"><span class="nav-icon">♫</span><span>Focus Music</span></button>
+        <button class="nav-item" data-view="leaderboard"><span class="nav-icon">♛</span><span>Leaderboard</span></button>
+        <button class="nav-item admin-only hidden" data-view="admin"><span class="nav-icon">⚙</span><span>Admin Sync</span></button>
         <button class="nav-item" data-view="doubts"><span class="nav-icon">?</span><span>Doubt Room</span></button>
       </nav>
       <div class="vip-panel"><span>✦</span><div><b>Rathod VIP</b><small>Your premium study zone</small></div></div>
@@ -71,6 +74,27 @@
         <div class="chat-layout card"><div class="chat-head"><div class="room-avatar">RH</div><div><b>Rathod Study Room</b><small><span class="online-dot"></span> Live student discussion</small></div><button class="round-btn">⋮</button></div><div id="chatMessages" class="messages"></div><form id="chatForm" class="composer"><button type="button" class="attach-btn">＋</button><input id="chatInput" maxlength="500" placeholder="Type your message…" autocomplete="off" required /><button class="send-btn" aria-label="Send">➤</button></form></div>
       </section>
 
+      <section id="music" class="view">
+        <div class="music-hero"><div><span class="eyebrow">RATHOD VIP RADIO</span><h2>Focus Music</h2><p>Deep focus ke liye curated study playlist — directly from your existing Supabase library.</p><div class="music-stats"><span><b id="songCount">0</b> tracks</span><span>•</span><span>R2 + Google Drive</span></div></div><div class="vinyl"><i>R</i></div></div>
+        <div class="music-layout"><div><div class="section-title music-title"><div><span class="eyebrow">YOUR PLAYLIST</span><h2>Study flow</h2></div></div><div id="songsGrid" class="song-list"><div class="empty"><span>♫</span><b>Loading playlist…</b></div></div></div><aside class="now-playing card"><span class="eyebrow">NOW PLAYING</span><div class="album-art"><span>♫</span></div><h3 id="nowTitle">Select a track</h3><p>Rathod VIP Focus Radio</p><audio id="globalAudio" controls preload="none"></audio><small>Audio streams from your existing R2/Drive source.</small></aside></div>
+      </section>
+
+      <section id="leaderboard" class="view">
+        <div class="rank-hero"><div><span class="eyebrow">NEET STUDY LEAGUE</span><h2>Rathod Champions</h2><p>Consistency, focus and XP — top students rise every season.</p></div><span class="season-pill">SEASON 2</span></div>
+        <div id="podium" class="podium"><div class="empty"><span>🏆</span><b>Loading champions…</b></div></div>
+        <div class="leaderboard-card card"><div class="leaderboard-head"><div><span class="eyebrow">TOP STUDENTS</span><h3>Live leaderboard</h3></div><span>XP</span></div><div id="leaderboardRows" class="leaderboard-rows"></div></div>
+      </section>
+
+      <section id="admin" class="view">
+        <div class="admin-hero"><div><span class="eyebrow">MAIN HUB BRIDGE</span><h2>Ashish Rathor Admin</h2><p>RathodHub Main is the source. Drive/R2 files stay in place; only metadata syncs here.</p></div><span class="admin-shield">🛡️</span></div>
+        <div class="sync-status"><span class="sync-dot"></span><div><b>Migration protected</b><small>52 materials • 32 songs • 195 legacy ranks • deletion blocked</small></div></div>
+        <div class="admin-grid">
+          <form id="adminMaterialForm" class="admin-card card"><span class="eyebrow">GOOGLE DRIVE MATERIAL</span><h3>Add material link</h3><p>Existing Drive file ko subject/folder mein sync karein.</p><label>Title<input id="adminMatTitle" required placeholder="Material title"></label><div class="form-two"><label>Subject<select id="adminMatSubject"><option>Physics</option><option>Physical Chemistry</option><option>Organic Chemistry</option><option>Inorganic Chemistry</option><option>Botany</option><option>Zoology</option></select></label><label>Folder<select id="adminMatFolder"><option>Concise Notes</option><option>Practice Sheets</option><option>Handwritten Notes</option><option>NEET PYQ</option><option>NCERT Discussion</option><option>Kattar Practice</option></select></label></div><label>Google Drive/R2 URL<input id="adminMatUrl" type="url" required placeholder="https://drive.google.com/..."></label><button class="admin-submit" type="submit">Sync material</button></form>
+          <form id="adminSongForm" class="admin-card card"><span class="eyebrow">R2 / DRIVE AUDIO</span><h3>Add song link</h3><p>Rathod VIP playlist mein existing audio URL add karein.</p><label>Song title<input id="adminSongTitle" required placeholder="Song title"></label><label>Audio stream URL<input id="adminSongUrl" type="url" required placeholder="https://...mp3"></label><label>Drive file ID (optional)<input id="adminSongDrive" placeholder="Google Drive file ID"></label><button class="admin-submit gold" type="submit">Sync song</button></form>
+        </div>
+        <div class="connector-note"><b>Direct file upload connector</b><p>Supabase egress restriction ke kaaran old Drive Edge Function offline hai. Existing Drive/R2 links work karte hain; direct binary upload connector ko quota restore ya new secure Drive Worker ke baad enable kiya jayega.</p></div>
+      </section>
+
       <section id="doubts" class="view">
         <div class="page-banner doubt-banner"><div><span class="eyebrow">ASK WITHOUT FEAR</span><h2>Doubt Room</h2><p>Small doubt ho ya big concept — ask your community.</p></div><button id="askDoubtBtn" class="cta-light">+ Ask a doubt</button></div>
         <div class="doubt-info"><span>💡</span><p><b>Tip:</b> Subject select karke question clearly likho. Better question = faster answer.</p></div><div id="doubtsList" class="doubt-list"></div><div id="doubtsEmpty" class="empty hidden"><span>✨</span><b>No doubts yet</b><p>Be the first student to ask.</p></div>
@@ -78,7 +102,7 @@
     </main>
   </div>
 
-  <nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-view="home"><span>⌂</span><small>Home</small></button><button data-view="materials"><span>▤</span><small>Library</small></button><button class="mobile-live" data-view="chat"><span>◉</span><small>Live</small></button><button data-view="doubts"><span>?</span><small>Doubts</small></button></nav>
+  <nav class="mobile-nav five" aria-label="Mobile navigation"><button class="active" data-view="home"><span>⌂</span><small>Home</small></button><button data-view="materials"><span>▤</span><small>Library</small></button><button class="mobile-live" data-view="music"><span>♫</span><small>Music</small></button><button data-view="leaderboard"><span>♛</span><small>Ranks</small></button><button data-view="chat"><span>◉</span><small>Chat</small></button></nav>
 
   <dialog id="doubtDialog"><form id="doubtForm" method="dialog" class="modal-card"><div class="modal-head"><div><span class="eyebrow">ASK COMMUNITY</span><h3>Post your doubt</h3></div><button type="button" id="closeDialog" class="icon-btn">✕</button></div><label>Subject<select id="doubtSubject" required><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Botany</option><option>Zoology</option><option>Other</option></select></label><label>Your question<textarea id="doubtText" rows="5" maxlength="800" placeholder="Explain your doubt clearly…" required></textarea></label><button class="primary full" type="submit">Post to community</button></form></dialog>
   <div id="toast" class="toast"></div><script type="module" src="app.js"></script>
