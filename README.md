@@ -17,3 +17,6 @@ Repository Settings → Pages → Source: **GitHub Actions**. Every push to `mai
 
 ## Install
 Open the deployed site in Chrome/Edge and select **Install App**. It works as a PWA on Android and desktop.
+
+## Status
+Firebase backend connected and GitHub Pages deployment enabled.
