@@ -1,0 +1,22 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function validText(field, max) { return field is string && field.size() > 0 && field.size() <= max; }
+    match /messages/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid && validText(request.resource.data.text, 500);
+      allow update, delete: if false;
+    }
+    match /doubts/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid && validText(request.resource.data.text, 800);
+      allow update, delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+    match /materials/{id} {
+      allow read: if signedIn();
+      allow write: if signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    match /admins/{uid} { allow read: if signedIn() && request.auth.uid == uid; allow write: if false; }
+  }
+}

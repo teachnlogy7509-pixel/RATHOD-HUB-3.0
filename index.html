@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#6d5dfc" />
+  <meta name="description" content="Rathod Hub 3.0 — study material, live chat and doubt solving." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Rathod Hub 3.0</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#home"><span class="brand-mark">R</span><span>Rathod Hub <b>3.0</b></span></a>
+      <nav id="nav">
+        <button class="nav-item active" data-view="home">🏠 <span>Home</span></button>
+        <button class="nav-item" data-view="materials">📚 <span>Study Material</span></button>
+        <button class="nav-item" data-view="chat">💬 <span>Live Chat</span></button>
+        <button class="nav-item" data-view="doubts">❓ <span>Doubt Room</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <button id="installBtn" class="ghost hidden">⬇ Install App</button>
+        <div id="authBox"><button id="loginBtn" class="primary full">Continue as Student</button></div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn" aria-label="Open menu">☰</button>
+        <div><small>WELCOME TO</small><h1 id="pageTitle">Rathod Hub</h1></div>
+        <div id="connectionBadge" class="badge">Demo mode</div>
+      </header>
+
+      <section id="home" class="view active">
+        <div class="hero card">
+          <div><span class="eyebrow">LEARN • ASK • GROW</span><h2>Your study world,<br><em>in one place.</em></h2><p>Notes, real-time student chat and quick doubt solving on mobile and PC.</p><button class="primary" data-open="materials">Start learning →</button></div>
+          <div class="hero-art"><div class="orbit o1"></div><div class="orbit o2"></div><span>🎓</span></div>
+        </div>
+        <div class="stat-grid">
+          <button class="stat card" data-open="materials"><span>📖</span><b id="materialCount">0</b><small>Study resources</small></button>
+          <button class="stat card" data-open="chat"><span>🟢</span><b>Live</b><small>Student chat</small></button>
+          <button class="stat card" data-open="doubts"><span>💡</span><b id="doubtCount">0</b><small>Doubts posted</small></button>
+        </div>
+      </section>
+
+      <section id="materials" class="view">
+        <div class="section-head"><div><span class="eyebrow">LIBRARY</span><h2>Study Material</h2></div><input id="materialSearch" class="search" placeholder="Search subject or topic…" /></div>
+        <div id="subjectChips" class="chips"><button class="chip active" data-subject="All">All</button><button class="chip" data-subject="Physics">Physics</button><button class="chip" data-subject="Chemistry">Chemistry</button><button class="chip" data-subject="Biology">Biology</button><button class="chip" data-subject="Maths">Maths</button></div>
+        <div id="materialsGrid" class="material-grid"></div>
+        <div id="materialsEmpty" class="empty hidden">No material found.</div>
+      </section>
+
+      <section id="chat" class="view">
+        <div class="chat-layout card">
+          <div class="chat-head"><div><span class="online-dot"></span><b>Student Live Chat</b><small>Be respectful and helpful</small></div></div>
+          <div id="chatMessages" class="messages"></div>
+          <form id="chatForm" class="composer"><input id="chatInput" maxlength="500" placeholder="Write a message…" autocomplete="off" required /><button class="primary" aria-label="Send">➤</button></form>
+        </div>
+      </section>
+
+      <section id="doubts" class="view">
+        <div class="section-head"><div><span class="eyebrow">COMMUNITY HELP</span><h2>Doubt Room</h2></div><button id="askDoubtBtn" class="primary">+ Ask a doubt</button></div>
+        <div id="doubtsList" class="doubt-list"></div>
+        <div id="doubtsEmpty" class="empty hidden">No doubts yet. Ask the first question!</div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="doubtDialog">
+    <form id="doubtForm" method="dialog" class="modal-card">
+      <div class="modal-head"><h3>Ask a doubt</h3><button type="button" id="closeDialog" class="icon-btn">✕</button></div>
+      <label>Subject<select id="doubtSubject" required><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Maths</option><option>Other</option></select></label>
+      <label>Your question<textarea id="doubtText" rows="5" maxlength="800" placeholder="Explain your doubt clearly…" required></textarea></label>
+      <button class="primary full" type="submit">Post doubt</button>
+    </form>
+  </dialog>
+  <div id="toast" class="toast"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

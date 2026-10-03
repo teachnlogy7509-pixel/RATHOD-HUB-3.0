@@ -1,0 +1,40 @@
+import { firebaseConfig } from './firebase-config.js';
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const state = { user: null, db: null, auth: null, firebase: false, materials: [], doubts: [], subject: 'All' };
+const demoMaterials = [
+  {id:'1',title:'Motion & Laws — Quick Notes',description:'Core formulas, graphs and solved examples.',subject:'Physics',type:'PDF',url:'#'},
+  {id:'2',title:'Organic Chemistry Reactions',description:'Important named reactions and revision map.',subject:'Chemistry',type:'PDF',url:'#'},
+  {id:'3',title:'Human Physiology Revision',description:'Chapter-wise diagrams and one-shot notes.',subject:'Biology',type:'Notes',url:'#'},
+  {id:'4',title:'Calculus Formula Sheet',description:'Limits, derivatives and integration formulas.',subject:'Maths',type:'PDF',url:'#'}
+];
+
+function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function openView(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('#pageTitle').textContent={home:'Rathod Hub',materials:'Study Material',chat:'Live Chat',doubts:'Doubt Room'}[id];$('.sidebar').classList.remove('open');location.hash=id==='home'?'':id}
+$$('[data-view]').forEach(b=>b.onclick=()=>openView(b.dataset.view));$$('[data-open]').forEach(b=>b.onclick=()=>openView(b.dataset.open));$('#menuBtn').onclick=()=>$('.sidebar').classList.toggle('open');
+
+function esc(s=''){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fmt(ts){try{const d=ts?.toDate?ts.toDate():new Date(ts||Date.now());return d.toLocaleString([],{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}catch{return 'Now'}}
+function renderMaterials(){const q=$('#materialSearch').value.toLowerCase();const rows=state.materials.filter(x=>(state.subject==='All'||x.subject===state.subject)&&`${x.title} ${x.description} ${x.subject}`.toLowerCase().includes(q));$('#materialsGrid').innerHTML=rows.map(x=>`<article class="material card"><div class="file-icon">${x.type==='Video'?'▶️':'📄'}</div><h3>${esc(x.title)}</h3><p>${esc(x.description||'Study resource')}</p><footer><span class="subject">${esc(x.subject||'General')}</span><a href="${esc(x.url||'#')}" target="_blank" rel="noopener">Open →</a></footer></article>`).join('');$('#materialsEmpty').classList.toggle('hidden',rows.length>0);$('#materialCount').textContent=state.materials.length}
+$('#materialSearch').oninput=renderMaterials;$$('.chip').forEach(b=>b.onclick=()=>{$$('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.subject=b.dataset.subject;renderMaterials()});
+function renderDoubts(){const rows=state.doubts;$('#doubtsList').innerHTML=rows.map(x=>`<article class="doubt"><div><span class="subject">${esc(x.subject)}</span><h3>${esc(x.text)}</h3><p>Asked by ${esc(x.authorName||'Student')}</p></div><time>${fmt(x.createdAt)}</time></article>`).join('');$('#doubtsEmpty').classList.toggle('hidden',rows.length>0);$('#doubtCount').textContent=rows.length}
+function addMessage(x){const el=document.createElement('article');el.className=`message ${x.uid===state.user?.uid?'mine':''}`;el.innerHTML=`<header><b>${esc(x.authorName||'Student')}</b><time>${fmt(x.createdAt)}</time></header><p>${esc(x.text)}</p>`;$('#chatMessages').append(el);$('#chatMessages').scrollTop=$('#chatMessages').scrollHeight}
+
+async function initFirebase(){const configured=!Object.values(firebaseConfig).some(v=>v.includes('PASTE_'));if(!configured){startDemo();return}try{
+ const [{initializeApp},{getAuth,onAuthStateChanged,signInAnonymously,updateProfile},{getFirestore,collection,addDoc,query,orderBy,limit,onSnapshot,serverTimestamp}] = await Promise.all([
+  import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')]);
+ const app=initializeApp(firebaseConfig);state.auth=getAuth(app);state.db=getFirestore(app);state.api={collection,addDoc,query,orderBy,limit,onSnapshot,serverTimestamp,signInAnonymously,updateProfile};state.firebase=true;$('#connectionBadge').textContent='Firebase connected';$('#connectionBadge').classList.add('online');
+ onAuthStateChanged(state.auth,u=>{state.user=u;renderAuth();if(u)subscribeData()});
+ }catch(e){console.error(e);toast('Firebase connection failed — demo mode started');startDemo()}}
+function startDemo(){state.materials=demoMaterials;state.doubts=JSON.parse(localStorage.getItem('rh_doubts')||'[]');state.user={uid:localStorage.getItem('rh_uid')||crypto.randomUUID(),displayName:localStorage.getItem('rh_name')||'Guest Student'};localStorage.setItem('rh_uid',state.user.uid);renderAuth();renderMaterials();renderDoubts();const welcome={authorName:'Rathod Hub',text:'Welcome! Firebase connect karne ke baad yeh chat sabhi devices par live hogi.',createdAt:Date.now()};addMessage(welcome)}
+function renderAuth(){if(!state.user){$('#authBox').innerHTML='<button id="loginBtn" class="primary full">Continue as Student</button>';$('#loginBtn').onclick=login;return}$('#authBox').innerHTML=`<button class="ghost full">👤 ${esc(state.user.displayName||'Student')}</button>`}
+async function login(){if(!state.firebase)return;try{const c=await state.api.signInAnonymously(state.auth);const name=prompt('Your name?','Student')?.trim()||'Student';await state.api.updateProfile(c.user,{displayName:name});state.user=c.user;renderAuth();subscribeData()}catch(e){toast(e.message)}}
+function subscribeData(){if(state.subscribed)return;state.subscribed=true;const a=state.api;
+ a.onSnapshot(a.query(a.collection(state.db,'materials'),a.orderBy('createdAt','desc'),a.limit(100)),s=>{state.materials=s.docs.map(d=>({id:d.id,...d.data()}));renderMaterials()});
+ a.onSnapshot(a.query(a.collection(state.db,'doubts'),a.orderBy('createdAt','desc'),a.limit(100)),s=>{state.doubts=s.docs.map(d=>({id:d.id,...d.data()}));renderDoubts()});
+ a.onSnapshot(a.query(a.collection(state.db,'messages'),a.orderBy('createdAt','asc'),a.limit(100)),s=>{$('#chatMessages').innerHTML='';s.docs.forEach(d=>addMessage(d.data()))});}
+$('#chatForm').onsubmit=async e=>{e.preventDefault();const text=$('#chatInput').value.trim();if(!text)return;if(!state.user){toast('First continue as student');return}$('#chatInput').value='';if(state.firebase){await state.api.addDoc(state.api.collection(state.db,'messages'),{text,uid:state.user.uid,authorName:state.user.displayName||'Student',createdAt:state.api.serverTimestamp()})}else addMessage({text,uid:state.user.uid,authorName:state.user.displayName,createdAt:Date.now()})};
+$('#askDoubtBtn').onclick=()=>$('#doubtDialog').showModal();$('#closeDialog').onclick=()=>$('#doubtDialog').close();$('#doubtForm').onsubmit=async e=>{e.preventDefault();const item={subject:$('#doubtSubject').value,text:$('#doubtText').value.trim(),uid:state.user?.uid||'guest',authorName:state.user?.displayName||'Student',createdAt:state.firebase?state.api.serverTimestamp():Date.now()};if(state.firebase)await state.api.addDoc(state.api.collection(state.db,'doubts'),item);else{state.doubts.unshift(item);localStorage.setItem('rh_doubts',JSON.stringify(state.doubts));renderDoubts()}$('#doubtText').value='';$('#doubtDialog').close();toast('Doubt posted')};
+let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('#installBtn').classList.remove('hidden')});$('#installBtn').onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('#installBtn').classList.add('hidden')}};
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));openView(location.hash.slice(1)||'home');initFirebase();
