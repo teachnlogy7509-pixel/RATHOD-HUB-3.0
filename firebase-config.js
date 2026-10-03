@@ -1,10 +1,8 @@
-// Firebase Console → Project settings → Your apps → Web app → SDK setup.
-// Replace these placeholders. This browser config is safe to commit; security comes from Firestore Rules.
 export const firebaseConfig = {
-  apiKey: "PASTE_FIREBASE_API_KEY",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyBMexli-_SAjcRWeY6jnRfdoxkwzjrvM6U",
+  authDomain: "rathod-hub.firebaseapp.com",
+  projectId: "rathod-hub",
+  storageBucket: "rathod-hub.firebasestorage.app",
+  messagingSenderId: "130962755921",
+  appId: "1:130962755921:web:c3b3c4bb680290213c0370"
 };
