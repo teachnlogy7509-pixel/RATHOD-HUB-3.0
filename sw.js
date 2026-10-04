@@ -1,4 +1,4 @@
-const CACHE='rathod-hub-v11';const ASSETS=['./','./index.html','./styles.css?v=11','./app.js?v=11','./manifest.webmanifest','./icons/icon.svg',
+const CACHE='rathod-hub-v12-low-reads';const ASSETS=['./','./index.html','./styles.css?v=12','./app.js?v=12','./manifest.webmanifest','./icons/icon.svg',
   "./about.html",
   "./faq.html",
   "./privacy.html",
